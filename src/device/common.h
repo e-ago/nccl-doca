@@ -12,6 +12,7 @@
 #include "op128.h"
 #include "reduce_kernel.h"
 #include "network/unpack/unpack_defs.h"
+#include "network/doca/doca_defs.h"
 
 #define COLL_UNROLL (ncclCollUnroll())
 
@@ -35,6 +36,9 @@ struct ncclShmemGroup {
   void* dsts[NCCL_MAX_ARITY+1];
   union {
     unpackGroupShmem unpack;
+    #if __CUDA_ARCH__ >= 700
+      docaGroupShmem  doca;
+    #endif
   } devicePlugin;
   int32_t dstSizes[NCCL_MAX_ARITY+1];
 };
@@ -60,6 +64,9 @@ struct ncclShmemData {
 
   alignas(16) union {
     unpackShmem unpack;
+    #if __CUDA_ARCH__ >= 700
+      docaShmem  doca;
+    #endif
   } devicePlugin;
 };
 

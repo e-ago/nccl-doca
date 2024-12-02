@@ -87,7 +87,8 @@ $(OBJDIR)/genobj/%.d: $(OBJDIR)/gensrc/%
 	$(call DEPENDS,$@,$<)
 
 $(DEVGLUE_OBJ): $(LIB_OBJS)
-	$(NVCC) $(NVCUFLAGS) -dlink $^ -o $@
+	$(NVCC) $(NVCUFLAGS) -dlink $(DOCA_LIB_STATIC) $^ -o $@
+# $(NVCC) $(NVCUFLAGS) -dlink $^ -o $@
 
 $(MANIFEST): $(LIB_OBJS) $(DEVGLUE_OBJ)
 	@echo $^ > $@

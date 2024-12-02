@@ -560,6 +560,17 @@ ncclResult_t ncclNetCheckDeviceVersion(struct ncclComm* comm, ncclNet_t* net, in
           props.netDeviceVersion, NCCL_NET_DEVICE_UNPACK_VERSION);
         return ncclInternalError;
       }
+    case NCCL_NET_DEVICE_DOCA:
+      if (props.netDeviceVersion == NCCL_NET_DEVICE_DOCA_VERSION_P2P_OFFLOAD) {
+        if (comm->rank == 0) printf("Using NCCL_NET_DEVICE_DOCA_VERSION_P2P_OFFLOAD net plugin version %d\n",
+          props.netDeviceVersion);
+        return ncclSuccess;
+      } else {
+        WARN("NCCL_DEVICE_DOCA plugin has incompatible version %d, this NCCL build is compatible with %d, not using it",
+          props.netDeviceVersion, NCCL_NET_DEVICE_DOCA_VERSION_P2P_OFFLOAD);
+        exit(1);
+        return ncclInternalError;
+      }
     default:
       WARN("Unknown device code index");
       return ncclInternalError;

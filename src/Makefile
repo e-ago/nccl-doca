@@ -42,6 +42,9 @@ PKGTARGET  := $(PKGCONFIGFILE)
 LIBOBJ     := $(LIBSRCFILES:%.cc=$(OBJDIR)/%.o)
 DEPFILES   := $(LIBOBJ:%.o=%.d)
 LDFLAGS    += -L${CUDA_LIB} -l$(CUDARTLIB) -lpthread -lrt -ldl
+# ifneq ($(DOCA_LIB_STATIC), "")
+LDFLAGS    += -Wl,--whole-archive $(DOCA_LIB_STATIC) -Wl,--no-whole-archive
+# endif
 
 DEVMANIFEST := $(BUILDDIR)/obj/device/manifest
 
